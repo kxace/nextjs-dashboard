@@ -121,14 +121,8 @@ export async function authenticate(
     try {
         await signIn('credentials', formData);
     } catch (error) {
-        if (error instanceof AuthError) {
-            // @ts-expect-error error will always have type attribute
-            switch (error.type) {
-                case 'CredentialsSignin':
-                    return 'Invalid credentials.';
-                default:
-                    return 'Something went wrong.';
-            }
+        if ((error as Error).message.includes('CredentialsSignin')) {
+            return 'CredentialSignin';
         }
         throw error;
     }
